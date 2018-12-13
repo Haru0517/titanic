@@ -67,9 +67,31 @@ def tree_model():
     my_solution.to_csv("../result/my_tree_one.csv", index_label=["PassengerId"])
 
 
+def tree_model2():
+    # 「train」の目的変数と説明変数の値を取得
+    target = train["Survived"].values
+    features_two = train[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
+
+    # 決定木の作成とアーギュメントの設定
+    max_depth = 10
+    min_samples_split = 5
+    my_tree_two = tree.DecisionTreeClassifier(max_depth=max_depth,
+                                              min_samples_split=min_samples_split, random_state=1)
+    my_tree_two = my_tree_two.fit(features_two, target)
+
+    # tsetから「その2」で使う項目の値を取り出す
+    test_features_2 = test[["Pclass", "Age", "Sex", "Fare", "SibSp", "Parch", "Embarked"]].values
+
+    # 「その2」の決定木を使って予測をしてCSVへ書き出す
+    my_prediction_tree_two = my_tree_two.predict(test_features_2)
+    PassengerId = np.array(test["PassengerId"]).astype(int)
+    my_solution_tree_two = pd.DataFrame(my_prediction_tree_two, PassengerId, columns=["Survived"])
+    my_solution_tree_two.to_csv("../result/my_tree_two.csv", index_label=["PassengerId"])
+
+
 def main():
     preprocessing()
-    tree_model()
+    tree_model2()
 
 
 if __name__ == '__main__':
